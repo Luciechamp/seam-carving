@@ -18,14 +18,14 @@ public class Coccinelle
         M = new int[grille.length][grille[0].length];
         int[][] grilleValeursMax = new int[grille.length][grille[0].length];
 
-        // We fill the M array
-        // we go through the grid line by line ...
+        // On rempli la grille M
+        // On rempli la grille ligne par ligne ...
         for (int l = 0; l < grille.length; l++)
         {
-            // ... and column by column 
+            // ... et colonne pas colonne
             for (int c = 0; c < grille[0].length; c++)
             {
-                // if we're on the first line M[l][c] will be the same as grille[l][c]
+                // si on est sur la première ligne M[l][c] sera identique que la grille[l][c]
                 if(l == 0)
                 {
                     M[l][c] = grille[l][c];
@@ -33,40 +33,40 @@ public class Coccinelle
                 }
                 else
                 {
-                    //we check the 3 possible values of the previous line
-                    // 1) we create a temporary int to store the biggest value on the previous line and we give it 
-                    // the value right under the one we're in now
+                    // on vérifie les trois valeurs possible de la ligne précédente
+                    // 1) on créé un int temporairement pour stocker la plus grande valeur de la ligne précédente et on la retourne
+                    // la valeur juste en dessous de celle sur laquelle on se situe maintenant
                     int maxLignePrecedente = M[l-1][c];
                     int colonneMax = c;
-                    // 2) we check if the value at the right and at the left (next line) are bigger (BUT careful if we're 
-                    // at the first column or the last
+                    // 2) On vérifie si les valeurs à gauche et à droite (ligne d'après) sont plus grande (mais attention si  
+                    // on est sur la première ou dernière colonne
 
-                    // if it's not the first column
+                    // si ce n'est pas la première colonne
                     if (c > 0)
                     {
-                        // we compare the one below with the below left
-                        // l - 1 because it's previous line, c - 1 because it's the column on the left
+                        // on compare la valeur de la case du dessous avec celle en dessous à gauche
+                        // l - 1 parce que c'est la ligne précédente, c - 1 parceque c'est la colonne de gauche
                         if (M[l-1][c-1] > maxLignePrecedente)
                         {
-                            // if it's bigger we give it the value and we assume that this is now the column of the biggest figure
+                            // si c'est la plus grande on lui attribue la valeur et on assume que c'est maintenant la colonne avec la plus grande valeur
                             maxLignePrecedente = M[l-1][c-1];
                             colonneMax = c-1;
                         }
                     }
 
-                    // if it's not the last column
+                    // si ce n'est pas la dernière colonne
                     if (c < grille[0].length - 1)
                     {
-                        // we compare the one below with the below right
+                        // on compare la valeur de la case  en dessous avec celle en dessous à droite
                         if (M[l-1][c+1] > maxLignePrecedente)
                         {
-                            // if it's bigger we give it the value and we assume that this is now the column of the biggest figure
+                            // si c'est plus grand on lui attribue la valeur et on assume que c'est maintenant la colonne avec la valeur la plus grande
                             maxLignePrecedente = M[l-1][c+1];
                             colonneMax = c+1;
                         }
                     }
 
-                    // we assign M[l,c] value and we store in grilleValeursMax the column of the biggest value below us
+                    //on attribue la valeur M[l,c] et on la stocke dans grilleValeursMax la colonne avec la plus grande valeur en dessous de notre position
                     grilleValeursMax[l][c] = colonneMax;
                     M[l][c] = grille[l][c] + maxLignePrecedente;
                 }
@@ -88,21 +88,22 @@ public class Coccinelle
             }
         }
 
-        // We want to check the path from where it comes thanks to our grilleValeursMax array that stored the
-        // indexes of our movement in each line
+        // On veut vérifier le chemin par d'où il vient grâce à la grille grilleValeursMax qui stocke les index de nos mouvements dans
+        //chaque ligne
+      
         cheminMax = new int[grille.length];
 
         for (int i = grilleValeursMax.length - 1; i >= 0; i--)
         {
             for (int j = 0; j < grilleValeursMax[0].length; j++)
             {
-                // if it matches the column we're in
+                // si cela correspond au colonne, on est dedans
                 if (j == indexMaxLigneCourante)
                 {
-                    // we add the cell to the path
+                    // on ajoute la cellule au chemin
                     cheminMax[i] = j;
                     indexMaxLigneCourante = grilleValeursMax[i][j];
-                    // we break because we have found the cell we wanted on that line so we move on
+                    // on break car on a trouvé la cellule que l'on voulait donc on continue
                     break;
                 }
             }
